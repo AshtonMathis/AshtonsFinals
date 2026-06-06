@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ashton Mathis' Final Exam Study Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d12;
+  --surface: #13131a;
+  --surface2: #1a1a24;
+  --surface3: #222230;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.15);
+  --text: #f0eee8;
+  --text-muted: #7a7888;
+  --text-dim: #4a4858;
+
+  --eng: #c084fc;
+  --eng-dark: #7c3aed;
+  --eng-glow: rgba(192,132,252,0.15);
+  --his: #fb923c;
+  --his-dark: #c2410c;
+  --his-glow: rgba(251,146,60,0.15);
+  --chem: #34d399;
+  --chem-dark: #059669;
+  --chem-glow: rgba(52,211,153,0.15);
+  --math: #60a5fa;
+  --math-dark: #1d4ed8;
+  --math-glow: rgba(96,165,250,0.15);
+
+  --correct: #34d399;
+  --correct-bg: rgba(52,211,153,0.1);
+  --wrong: #f87171;
+  --wrong-bg: rgba(248,113,113,0.1);
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-lg: 20px;
+  --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* NOISE TEXTURE OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+/* ANIMATED BACKGROUND */
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.12;
+  animation: drift 20s ease-in-out infinite;
+}
+.orb-1 { width: 500px; height: 500px; background: var(--eng); top: -100px; left: -100px; animation-delay: 0s; }
+.orb-2 { width: 400px; height: 400px; background: var(--his); top: 40%; right: -80px; animation-delay: -7s; }
+.orb-3 { width: 350px; height: 350px; background: var(--chem); bottom: -80px; left: 30%; animation-delay: -14s; }
+.orb-4 { width: 300px; height: 300px; background: var(--math); top: 20%; left: 50%; animation-delay: -4s; }
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+/* MAIN APP */
+#app {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ======================== HOME ======================== */
+.home-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.5rem 4rem;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  animation: fadeUp 0.6s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.home-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.home-eyebrow::before, .home-eyebrow::after {
+  content: '';
+  display: inline-block;
+  width: 30px;
+  height: 1px;
+  background: var(--text-dim);
+}
+
+.home-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 6vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #f0eee8 0%, #a09ab0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+}
+
+.home-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  font-weight: 300;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* STATS ROW */
+.stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.stat-pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 40px;
+  padding: 8px 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stat-pill strong { color: var(--text); font-weight: 600; }
+
+/* SUBJECT GRID */
+.subject-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 760px;
+}
+
+@media (max-width: 540px) {
+  .subject-grid { grid-template-columns: 1fr; }
+}
+
+.subj-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.subj-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--transition);
+  border-radius: inherit;
+}
+
+.subj-card[data-subj="english"]::before { background: var(--eng-glow); }
+.subj-card[data-subj="history"]::before { background: var(--his-glow); }
+.subj-card[data-subj="chemistry"]::before { background: var(--chem-glow); }
+.subj-card[data-subj="math"]::before { background: var(--math-glow); }
+
+.subj-card:hover::before { opacity: 1; }
+.subj-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+.subj-card:hover .subj-icon { transform: scale(1.1) rotate(-5deg); }
+
+.subj-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subj-icon {
+  font-size: 2rem;
+  transition: transform var(--transition);
+  line-height: 1;
+}
+
+.subj-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.subj-badge-eng { background: rgba(192,132,252,0.15); color: var(--eng); }
+.subj-badge-his { background: rgba(251,146,60,0.15); color: var(--his); }
+.subj-badge-chem { background: rgba(52,211,153,0.15); color: var(--chem); }
+.subj-badge-math { background: rgba(96,165,250,0.15); color: var(--math); }
+
+.subj-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+  font-family: 'Playfair Display', serif;
+}
+
+.subj-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.subj-progress-bar {
+  height: 3px;
+  background: var(--surface3);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.subj-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+.fill-eng { background: var(--eng); }
+.fill-his { background: var(--his); }
+.fill-chem { background: var(--chem); }
+.fill-math { background: var(--math); }
+
+.subj-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.subj-action-btn {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.subj-action-btn:hover { border-color: var(--border-hover); color: var(--text); background: var(--surface2); }
+
+/* ======================== INNER SCREENS ======================== */
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  animation: fadeUp 0.4s ease both;
+}
+
+.screen-header {
+  background: rgba(13,13,18,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 14px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.back-btn:hover { border-color: var(--border-hover); color: var(--text); }
+.back-btn svg { width: 14px; height: 14px; }
+
+.header-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.header-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.header-score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.score-val { font-weight: 600; color: var(--text); font-size: 15px; }
+
+/* SCREEN BODY */
+.screen-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1.5rem 4rem;
+  max-width: 700px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ======================== MODE SELECT ======================== */
+.mode-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+.mode-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 2rem;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 480px) {
+  .mode-grid { grid-template-columns: 1fr; }
+}
+
+.mode-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.mode-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+.mode-card .big-icon { font-size: 2.5rem; }
+.mode-card h3 { font-size: 1.1rem; font-weight: 600; }
+.mode-card p { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+
+/* ======================== PROGRESS BAR ======================== */
+.quiz-progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--surface3);
+  border-radius: 2px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+.quiz-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ======================== QUIZ ======================== */
+.q-number {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.q-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--text);
+  margin-bottom: 2rem;
+  max-width: 560px;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 520px) {
+  .options-grid { grid-template-columns: 1fr; }
+}
+
+.opt-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  color: var(--text);
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  text-align: left;
+  cursor: pointer;
+  transition: var(--transition);
+  line-height: 1.4;
+  position: relative;
+  overflow: hidden;
+}
+
+.opt-btn::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.opt-btn:hover:not(:disabled)::before { opacity: 1; }
+.opt-btn:hover:not(:disabled) { border-color: var(--border-hover); background: var(--surface2); }
+
+.opt-btn.correct {
+  background: var(--correct-bg);
+  border-color: var(--correct);
+  color: var(--correct);
+}
+.opt-btn.correct::before { background: var(--correct); opacity: 1; }
+
+.opt-btn.wrong {
+  background: var(--wrong-bg);
+  border-color: var(--wrong);
+  color: var(--wrong);
+}
+.opt-btn.wrong::before { background: var(--wrong); opacity: 1; }
+
+.opt-btn.reveal {
+  background: rgba(52,211,153,0.06);
+  border-color: rgba(52,211,153,0.3);
+  color: var(--chem);
+}
+
+/* FEEDBACK */
+.feedback-box {
+  width: 100%;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  border: 1px solid;
+  animation: feedIn 0.3s ease both;
+}
+@keyframes feedIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.feedback-box.correct { background: var(--correct-bg); border-color: rgba(52,211,153,0.3); color: #a7f3d0; }
+.feedback-box.wrong { background: var(--wrong-bg); border-color: rgba(248,113,113,0.3); color: #fca5a5; }
+
+.feedback-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+}
+
+.next-btn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.01em;
+}
+.next-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.next-btn svg { width: 16px; height: 16px; }
+
+/* ======================== FLASHCARDS ======================== */
+.flash-counter {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.1em;
+}
+
+.flashcard-wrapper {
+  width: 100%;
+  perspective: 1000px;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+}
+
+.flashcard-inner {
+  width: 100%;
+  min-height: 240px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  border-radius: var(--radius-lg);
+}
+
+.flashcard-inner.flipped { transform: rotateY(180deg); }
+
+.flashcard-face {
+  position: absolute;
+  width: 100%;
+  min-height: 240px;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.flashcard-front {
+  background: var(--surface);
+}
+
+.flashcard-back {
+  background: var(--surface2);
+  transform: rotateY(180deg);
+}
+
+.flashcard-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 1rem;
+}
+
+.flashcard-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.flashcard-answer {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text);
+  font-weight: 400;
+}
+
+.flash-hint {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flash-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+.flash-nav-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 22px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex; align-items: center; gap: 6px;
+}
+.flash-nav-btn:hover:not(:disabled) { border-color: var(--border-hover); color: var(--text); }
+.flash-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.flash-dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.flash-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--surface3);
+  transition: var(--transition);
+}
+.flash-dot.active { background: var(--text); width: 18px; border-radius: 3px; }
+
+/* KNOWN/UNKNOWN Buttons */
+.flash-mark-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+.flash-mark-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.mark-know {
+  background: var(--correct-bg);
+  border: 1px solid rgba(52,211,153,0.3);
+  color: var(--correct);
+}
+.mark-know:hover { background: rgba(52,211,153,0.2); }
+.mark-dontknow {
+  background: var(--wrong-bg);
+  border: 1px solid rgba(248,113,113,0.3);
+  color: var(--wrong);
+}
+.mark-dontknow:hover { background: rgba(248,113,113,0.2); }
+
+/* ======================== SCORE SCREEN ======================== */
+.score-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  animation: fadeUp 0.5s ease both;
+}
+
+.score-ring-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin-bottom: 1.5rem;
+}
+
+.score-ring-svg {
+  width: 160px; height: 160px;
+  transform: rotate(-90deg);
+}
+
+.score-ring-bg {
+  fill: none;
+  stroke: var(--surface3);
+  stroke-width: 8;
+}
+
+.score-ring-fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 408;
+  stroke-dashoffset: 408;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.3s;
+}
+
+.score-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-pct {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.score-label-sm {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.1em;
+}
+
+.score-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.score-message {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 400px;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.score-breakdown {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.score-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.score-stat-row:last-child { border-bottom: none; }
+.score-stat-label { color: var(--text-muted); }
+.score-stat-val { font-weight: 600; }
+
+.score-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.score-action-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid;
+}
+.score-action-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+.score-action-btn.primary { border-color: transparent; color: #000; }
+.score-action-btn.secondary { background: transparent; color: var(--text-muted); border-color: var(--border); }
+.score-action-btn.secondary:hover { border-color: var(--border-hover); color: var(--text); }
+
+/* STREAK INDICATOR */
+.streak-bar {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+.streak-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+.streak-dot.correct-dot { background: var(--correct); }
+.streak-dot.wrong-dot { background: var(--wrong); }
+.streak-dot.empty-dot { background: var(--surface3); }
+
+/* WRITTEN RESPONSE */
+.written-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  color: var(--text);
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  transition: border-color var(--transition);
+}
+.written-input:focus { outline: none; border-color: var(--border-hover); }
+.written-input::placeholder { color: var(--text-dim); }
+
+.check-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 12px;
+}
+.check-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* TIMER */
+.timer-bar-wrap {
+  width: 100%;
+  height: 2px;
+  background: var(--surface3);
+  border-radius: 1px;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+}
+.timer-bar {
+  height: 100%;
+  border-radius: 1px;
+  transition: width 1s linear;
+}
+
+/* TOOLTIP */
+.tooltip {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* SUBJECT-SPECIFIC COLORS */
+.c-eng { color: var(--eng); }
+.c-his { color: var(--his); }
+.c-chem { color: var(--chem); }
+.c-math { color: var(--math); }
+
+.bg-eng { background: var(--eng); }
+.bg-his { background: var(--his); }
+.bg-chem { background: var(--chem); }
+.bg-math { background: var(--math); }
+
+.border-eng { border-color: var(--eng) !important; }
+.border-his { border-color: var(--his) !important; }
+.border-chem { border-color: var(--chem) !important; }
+.border-math { border-color: var(--math) !important; }
+
+/* FOOTER */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 0.6rem;
+  font-size: 11px;
+  color: var(--text-dim);
+  background: rgba(13,13,18,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  letter-spacing: 0.05em;
+  border-top: 1px solid var(--border);
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+/* MEGA QUIZ CARD */
+.mega-card {
+  width: 100%;
+  max-width: 760px;
+  margin-top: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.mega-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(192,132,252,0.07), rgba(251,146,60,0.07), rgba(52,211,153,0.07), rgba(96,165,250,0.07));
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.mega-card:hover::before { opacity: 1; }
+.mega-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+.mega-card:hover .mega-arrow { transform: translateX(4px); }
+.mega-card-left { display: flex; align-items: flex-start; gap: 16px; }
+.mega-icon { font-size: 2.2rem; line-height: 1; flex-shrink: 0; }
+.mega-title { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
+.mega-sub { font-size: 13px; color: var(--text-muted); line-height: 1.4; margin-bottom: 10px; }
+.mega-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+.mega-tag { font-size: 12px; font-weight: 500; }
+.mega-arrow { font-size: 1.3rem; color: var(--text-muted); transition: transform var(--transition); flex-shrink: 0; }
+
+/* SUBJECT LABEL IN QUIZ (for mega mode) */
+.q-subject-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+
+/* CONFETTI */
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(600px) rotate(720deg); opacity: 0; }
+}
+.confetti-piece {
+  position: fixed;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  animation: confettiFall linear both;
+  z-index: 999;
+  pointer-events: none;
+}
+
+/* HIGHLIGHT ANIMATION */
+@keyframes pulse-correct {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); }
+  50% { box-shadow: 0 0 0 6px rgba(52,211,153,0.15); }
+}
+.opt-btn.correct { animation: pulse-correct 0.6s ease; }
+
+/* KEYBOARD HINT */
+.kbd {
+  display: inline-block;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+/* SUMMARY TABLE */
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 0.5rem;
+}
+.summary-table th {
+  text-align: left;
+  padding: 8px 10px;
+  color: var(--text-muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+}
+.summary-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.summary-table tr:last-child td { border-bottom: none; }
+.summary-table .correct-row td:first-child { border-left: 3px solid var(--correct); }
+.summary-table .wrong-row td:first-child { border-left: 3px solid var(--wrong); }
+</style>
+</head>
+<body>
+
+<div class="bg-orbs" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+
+<div id="app"></div>
+
+<footer>Ashton Mathis' Final Exam Study Hub &nbsp;·&nbsp; CP English 3 · US History II · Chemistry · Algebra 2</footer>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const SUBJECTS = {
+  english: {
+    name: 'CP English 3', short: 'English', icon: '📖',
+    color: 'eng', accent: '#c084fc', dark: '#7c3aed',
+    topics: ['Beowulf & Anglo-Saxon', 'Canterbury Tales', 'Macbeth', 'Sonnets', 'Non-fiction & Rhetoric']
+  },
+  history: {
+    name: 'US History II', short: 'History', icon: '🗽',
+    color: 'his', accent: '#fb923c', dark: '#c2410c',
+    topics: ['1920s & Prohibition', 'Great Depression', 'WWII', 'Holocaust', 'Cold War & Civil Rights']
+  },
+  chemistry: {
+    name: 'Chemistry', short: 'Chemistry', icon: '⚗️',
+    color: 'chem', accent: '#34d399', dark: '#059669',
+    topics: ['Matter & Mixtures', 'Atoms & Ions', 'Periodic Table', 'Bonding', 'Moles & Calculations']
+  },
+  math: {
+    name: 'Algebra 2', short: 'Math', icon: '📐',
+    color: 'math', accent: '#60a5fa', dark: '#1d4ed8',
+    topics: ['Compound Interest', 'Functions & Inverses', 'Radicals', 'Polynomials', 'Sequences & Systems']
+  }
+};
+
+const QUIZ = {
+english: [
+  {q:"What type of poetry is Beowulf?",a:"Heroic epic poetry",opts:["Lyric poetry","Heroic epic poetry","Shakespearean sonnet","Free verse"],e:"Beowulf is heroic epic poetry — characterized by a heroic protagonist, battles of grand scope, and expressing the cultural values of Anglo-Saxon society.",topic:"Beowulf & Anglo-Saxon"},
+  {q:"What is a kenning in Anglo-Saxon poetry?",a:"A compound poetic expression used as a substitute (e.g., 'whale-road' = sea)",opts:["A type of rhyme scheme","A pause within a line","A compound poetic expression used as a substitute (e.g., 'whale-road' = sea)","Repetition of consonants"],e:"A kenning is a compressed metaphorical compound phrase, common in Old English poetry. 'Whale-road' for the sea and 'ring-giver' for a king are classic examples.",topic:"Beowulf & Anglo-Saxon"},
+  {q:"What is the purpose of the caesura in Beowulf?",a:"To parse the line for singing and maintain social order through rhythm",opts:["To indicate a character's death","To mark the volta","To parse the line for singing and maintain social order through rhythm","To signal alliteration"],e:"The caesura (mid-line pause) helped scops (singers) perform the poem, controlled pacing, and reinforced the poem's oral tradition and social function.",topic:"Beowulf & Anglo-Saxon"},
+  {q:"Who wrote The Canterbury Tales?",a:"Geoffrey Chaucer",opts:["William Shakespeare","Geoffrey Chaucer","Sir Philip Sidney","Edmund Spenser"],e:"Geoffrey Chaucer (c. 1343–1400) wrote The Canterbury Tales, a framed collection of stories told by pilgrims journeying to Canterbury Cathedral.",topic:"Canterbury Tales"},
+  {q:"What is the Pardoner's main motivation for preaching?",a:"Money (greed)",opts:["Spreading God's word","Money (greed)","Fame and reputation","Fear of God's judgment"],e:"The Pardoner openly admits he preaches against avarice purely to profit from it — a stunning example of hypocrisy and the 'radix malorum est cupiditas' theme.",topic:"Canterbury Tales"},
+  {q:"In The Wife of Bath's Tale, what does the knight say a woman desires most?",a:"Sovereignty over her husband",opts:["True love and beauty","Wealth and jewels","Sovereignty over her husband","Freedom from marriage"],e:"The knight answers that women desire sovereignty — control over their husbands. This theme reflects the Wife of Bath's own desire for dominance in marriage.",topic:"Canterbury Tales"},
+  {q:"What internal conflict does Macbeth struggle with in Act I, scene vii?",a:"Ambition vs. moral conscience",opts:["Fear of death","Ambition vs. moral conscience","Love for Lady Macbeth","Loyalty to Banquo"],e:"Macbeth's 'vaulting ambition which o'erleaps itself' wars with his moral reservations — he knows killing a guest-king is wrong but cannot resist his ambition.",topic:"Macbeth"},
+  {q:"What does Macbeth see floating before him in Act II, scene i?",a:"A phantom dagger",opts:["A ghost of Banquo","A crown","A phantom dagger","A letter from Lady Macbeth"],e:"The floating dagger is a hallucination from Macbeth's 'heat-oppressed brain' — it foreshadows the murder and reflects his psychological unraveling.",topic:"Macbeth"},
+  {q:"What qualities in Banquo make Macbeth afraid of him (Act III)?",a:"He is brave, courageous, wise, and indeterminate",opts:["He is weak and easily manipulated","He knows about the witches","He is brave, courageous, wise, and indeterminate","He is next in line for the throne"],e:"Macbeth fears Banquo's noble character — bravery, wisdom, and the 'royalty of nature' — contrasting with Macbeth's own treacherous path to power.",topic:"Macbeth"},
+  {q:"In Act V, what does Macbeth compare life to?",a:"A candle, a walking shadow, a tale told by an idiot",opts:["A dream that fades at dawn","A river flowing endlessly to the sea","A candle, a walking shadow, a tale told by an idiot","A battle with no victor"],e:"The 'Tomorrow, and tomorrow' soliloquy uses three metaphors for life's meaninglessness: a brief candle, a poor player, and a tale 'full of sound and fury, signifying nothing.'",topic:"Macbeth"},
+  {q:"How many lines does every sonnet have?",a:"14",opts:["8","10","12","14"],e:"All sonnet forms (Italian/Petrarchan, Shakespearean/English, Spenserian, Wyatt) consist of exactly 14 lines in iambic pentameter.",topic:"Sonnets"},
+  {q:"What is the rhyme scheme of a Shakespearean sonnet?",a:"ABAB CDCD EFEF GG",opts:["ABBAABBA CDECDE","ABAB CDCD EFEF GG","ABAB BCBC CDCD EE","AABB CCDD EEFF GG"],e:"The English/Shakespearean sonnet has three interlocking quatrains (ABAB CDCD EFEF) and a closing couplet (GG). The couplet typically delivers the turn/conclusion.",topic:"Sonnets"},
+  {q:"What is a volta in a sonnet?",a:"A turn or shift in argument, tone, or emotion",opts:["The final rhymed couplet","A type of metrical inversion","A turn or shift in argument, tone, or emotion","The opening two lines"],e:"The volta is the 'turn' — a pivot in thought or feeling. In Italian sonnets it occurs between the octave and sestet; in English sonnets often before or within the final couplet.",topic:"Sonnets"},
+  {q:"In Sidney's Sonnet 31, to whom is the poem addressed?",a:"The Moon",opts:["His beloved Stella","God","The Moon","Time itself"],e:"Sidney addresses the Moon ('With how sad steps, O Moon') and asks if it too suffers from the cruelty of women, suggesting universal unrequited love.",topic:"Sonnets"},
+  {q:"What does SOAPS stand for in rhetorical analysis?",a:"Subject, Occasion, Audience, Purpose, Speaker",opts:["Subject, Occasion, Audience, Purpose, Speaker","Style, Organization, Argument, Persuasion, Sources","Subject, Outline, Argument, Point, Structure","Speaker, Opinion, Audience, Position, Style"],e:"SOAPS is a rhetorical analysis framework identifying the five elements of any persuasive text: Subject, Occasion (context), Audience, Purpose, and Speaker.",topic:"Non-fiction & Rhetoric"},
+  {q:"What is iambic pentameter?",a:"10 syllables per line in alternating unstressed/stressed pattern (da-DUM × 5)",opts:["Rhyming couplets in 8-syllable lines","10 syllables per line in alternating unstressed/stressed pattern (da-DUM × 5)","14-line poem structure","Free verse without consistent meter"],e:"Iambic pentameter = five iambs (da-DUM) per line = 10 syllables total. It is the dominant meter of Shakespeare, most English sonnets, and much Renaissance poetry.",topic:"Sonnets"},
+  {q:"What is the difference between diction and syntax?",a:"Diction = word choice; Syntax = arrangement of words",opts:["They mean the same thing","Diction = sentence length; Syntax = tone","Diction = word choice; Syntax = arrangement of words","Diction = figurative language; Syntax = rhyme"],e:"Diction refers to the specific words a writer chooses; syntax refers to how those words are ordered and structured in sentences. Both contribute to style and tone.",topic:"Non-fiction & Rhetoric"},
+  {q:"What is plagiarism and why is it wrong?",a:"Taking credit for someone else's work — it is dishonest and a form of intellectual theft",opts:["Using too many direct quotations","Taking credit for someone else's work — it is dishonest and a form of intellectual theft","Writing without a thesis statement","Paraphrasing ideas from a source"],e:"Plagiarism is presenting another's words, ideas, or work as your own without attribution. It's wrong because it is academically dishonest and denies credit to the original creator.",topic:"Non-fiction & Rhetoric"},
+  {q:"What does the Latin root 'mal' mean, and give an example?",a:"Bad/evil — examples: malicious, malfunction, maladministration",opts:["Great/strong — examples: magnificent, major","Bad/evil — examples: malicious, malfunction, maladministration","To believe — examples: credit, credential","To push — examples: pulse, compulsion"],e:"The Latin root 'mal' means bad or evil. Words include: malfunction, malicious, malnourished, maladministration, malevolent.",topic:"Non-fiction & Rhetoric"},
+  {q:"What is the difference between 'affect' and 'effect'?",a:"Affect = verb meaning to influence; Effect = noun meaning result/consequence",opts:["They are interchangeable","Affect = noun (the result); Effect = verb (to cause)","Affect = verb meaning to influence; Effect = noun meaning result/consequence","Both are nouns referring to outcomes"],e:"AFFECT is usually a verb (to influence): 'The cold affects me.' EFFECT is usually a noun (the result): 'The cold has a bad effect.' Memory trick: Effect is the End result.",topic:"Non-fiction & Rhetoric"}
+],
+history: [
+  {q:"Why were workers after WWI upset about pay raises they didn't receive?",a:"Wartime inflation eroded purchasing power while bosses refused promised raises",opts:["They wanted longer working hours","Wartime inflation eroded purchasing power while bosses refused promised raises","Unions had been banned by law","Foreign workers were paid more"],e:"Workers had been promised raises and sacrificed during the war. When the raises didn't materialize despite massive wartime inflation, it sparked major labor strikes in 1919.",topic:"1920s & Prohibition"},
+  {q:"What about communism made Americans so fearful after WWI?",a:"It threatened capitalism and democracy — seen as fundamentally anti-American",opts:["It promised free land to immigrants","It threatened capitalism and democracy — seen as fundamentally anti-American","Communist nations were already attacking America","It was popular among wealthy elites"],e:"The Red Scare emerged because communism's rejection of capitalism and individual property rights was seen as an existential threat to American values and the existing social order.",topic:"1920s & Prohibition"},
+  {q:"How did people justify the Palmer Raids?",a:"Fear of a communist revolution — raids targeted suspected radicals and anarchists",opts:["Evidence of specific bomb plots","Fear of a communist revolution — raids targeted suspected radicals and anarchists","A congressional mandate","Widespread public violence"],e:"Attorney General A. Mitchell Palmer used mass hysteria about a Bolshevik-style revolution to justify arresting thousands of suspected communists and anarchists with little due process.",topic:"1920s & Prohibition"},
+  {q:"What two contrasting ideologies clashed at the Scopes Monkey Trial?",a:"Scientific modernism (evolution) vs. religious fundamentalism (creationism)",opts:["Communism vs. capitalism","Scientific modernism (evolution) vs. religious fundamentalism (creationism)","Isolationism vs. interventionism","Prohibition vs. anti-Prohibition"],e:"The 1925 Scopes Trial was a flashpoint in the larger cultural war between modernism (science, urbanization, secular values) and fundamentalism (Biblical literalism, rural traditionalism).",topic:"1920s & Prohibition"},
+  {q:"Despite having the right to vote, why were women truly not equal post-WWI?",a:"Social barriers, limited job opportunities, and cultural expectations kept women subordinate",opts:["Women were never given the right to vote","The 19th Amendment only applied in some states","Social barriers, limited job opportunities, and cultural expectations kept women subordinate","Women chose not to participate in public life"],e:"While the 19th Amendment (1920) granted voting rights, women still faced wage discrimination, were excluded from many professions, and social norms confined them to domestic roles.",topic:"1920s & Prohibition"},
+  {q:"What northern city became a mecca for African Americans during the Great Migration?",a:"Chicago (also New York/Harlem)",opts:["Los Angeles","Atlanta","Chicago (also New York/Harlem)","Philadelphia"],e:"Chicago became a major destination for Black Southerners fleeing Jim Crow. New York's Harlem became the cultural capital, sparking the Harlem Renaissance.",topic:"1920s & Prohibition"},
+  {q:"What was 'buying on margin' and why was it so risky?",a:"Borrowing most of the purchase price to buy stocks — losses could exceed the investment",opts:["Buying government bonds at a discount","Paying in monthly installments for goods","Borrowing most of the purchase price to buy stocks — losses could exceed the investment","A type of savings account with guaranteed returns"],e:"Buying on margin meant paying only 10% down and borrowing the rest. When stocks crashed, investors owed far more than their holdings were worth, causing a catastrophic chain reaction.",topic:"Great Depression"},
+  {q:"What was Hoover's 'rugged individualism' policy and why did it fail?",a:"Belief that government aid created dependency — failed because the crisis was too severe",opts:["Mass government spending on public works","Belief that government aid created dependency — failed because the crisis was too severe","Nationalizing failing banks","Raising taxes on the wealthy to redistribute"],e:"Hoover believed direct relief would make people dependent and undermine American character. This laissez-faire approach was catastrophically insufficient for the scale of the Depression.",topic:"Great Depression"},
+  {q:"What disease did FDR have, and how did he use it politically?",a:"Polio — used his suffering to appear empathetic to struggling Americans",opts:["Tuberculosis — kept it completely secret","Blindness — used a guide dog publicly","Polio — used his suffering to appear empathetic to struggling Americans","Heart disease — used it to gain sympathy votes"],e:"FDR contracted polio in 1921. While he largely concealed the extent of his paralysis, his personal experience with hardship and recovery helped him genuinely connect with Depression-era Americans.",topic:"Great Depression"},
+  {q:"What were the three causes of WWII discussed in class?",a:"Treaty of Versailles, rise of fascism/totalitarianism, failure of appeasement",opts:["Pearl Harbor, nuclear weapons, colonialism","Treaty of Versailles, rise of fascism/totalitarianism, failure of appeasement","The Cold War, Korean War, Vietnam","Great Depression, New Deal, stock market crash"],e:"The three key causes: (1) the punishing Treaty of Versailles created German resentment, (2) economic crisis enabled totalitarian rise (Hitler, Mussolini, Hirohito), (3) appeasement emboldened Hitler.",topic:"WWII"},
+  {q:"What is Blitzkrieg and what did it reveal about Germany's strategy?",a:"'Lightning war' — fast combined armor/air attacks revealing intent for rapid conquest",opts:["A defensive strategy protecting the German border","'Lightning war' — fast combined armor/air attacks revealing intent for rapid conquest","A naval blockade used to starve Britain","An air-only strategic bombing campaign"],e:"Blitzkrieg combined tanks, motorized infantry, and air support in overwhelming fast strikes. It revealed Germany's strategy of speed and shock to overwhelm enemies before they could organize.",topic:"WWII"},
+  {q:"What happened on December 7th, 1941, and what was the result?",a:"Japan attacked Pearl Harbor — the US declared war on Japan the next day",opts:["Germany invaded France","Japan attacked Pearl Harbor — the US declared war on Japan the next day","The atomic bomb was dropped on Hiroshima","The Battle of Midway occurred"],e:"Japan's surprise attack on Pearl Harbor, Hawaii destroyed much of the US Pacific Fleet. FDR called it 'a date which will live in infamy.' Congress declared war on Japan on December 8.",topic:"WWII"},
+  {q:"How did the US government violate Japanese Americans' rights during WWII?",a:"Executive Order 9066 forced 110,000+ Japanese Americans into internment camps without trial",opts:["They were denied the right to vote","They were deported to Japan","Executive Order 9066 forced 110,000+ Japanese Americans into internment camps without trial","Their businesses were nationalized"],e:"Executive Order 9066 (1942) authorized forcible relocation of Japanese Americans to internment camps based purely on ethnicity — violating due process and constitutional rights.",topic:"WWII"},
+  {q:"What was the Nazi 'master race' ideology?",a:"Aryan (German) people were superior and destined to rule over 'inferior' races",opts:["All Europeans were equal partners in civilization","Aryan (German) people were superior and destined to rule over 'inferior' races","Military strength determined racial worth","Only Nazi party members were considered full citizens"],e:"Nazi racial ideology classified 'Aryan' Germanic people as a master race, justifying the persecution, enslavement, and genocide of Jews, Roma, disabled people, and others deemed 'inferior.'",topic:"Holocaust"},
+  {q:"What were the Nuremberg Trials and why were they significant internationally?",a:"War crimes tribunals establishing that individuals are accountable for crimes against humanity",opts:["Peace negotiations between the Allied powers","War crimes tribunals establishing that individuals are accountable for crimes against humanity","Trials that freed most Nazi soldiers","Negotiations that divided Germany into zones"],e:"The Nuremberg Trials (1945–46) established the groundbreaking precedent of international criminal accountability — that 'following orders' was no defense for genocide and war crimes.",topic:"Holocaust"},
+  {q:"What was the Marshall Plan and why was it implemented?",a:"US economic aid to rebuild Western Europe to prevent communism from spreading",opts:["A military alliance to defend Europe","US economic aid to rebuild Western Europe to prevent communism from spreading","A nuclear weapons development program","A plan to rebuild Japan and South Korea"],e:"The Marshall Plan (1948) provided ~$13 billion in US aid to rebuild war-devastated European economies. The strategy: prosperous democracies would resist communist movements.",topic:"Cold War & Civil Rights"},
+  {q:"What was Brown v. Board of Education and what did it overturn?",a:"Ruling that school segregation was unconstitutional — overturned 'separate but equal'",opts:["A law banning poll taxes for Black voters","Ruling that school segregation was unconstitutional — overturned 'separate but equal'","A case about school prayer in public schools","The constitutional amendment granting voting rights"],e:"Brown v. Board (1954) unanimously ruled that racially segregated schools violated the Equal Protection Clause, overturning Plessy v. Ferguson's 1896 'separate but equal' doctrine.",topic:"Cold War & Civil Rights"},
+  {q:"What was the Civil Rights Act of 1964?",a:"Banned discrimination based on race, color, religion, sex, or national origin",opts:["Gave African Americans the right to vote","Banned discrimination based on race, color, religion, sex, or national origin","Desegregated the military","Established affirmative action"],e:"The Civil Rights Act of 1964 outlawed discrimination in employment, public accommodations, federally assisted programs, and other areas — the most sweeping civil rights legislation since Reconstruction.",topic:"Cold War & Civil Rights"},
+  {q:"What was the Gulf of Tonkin incident and why was it controversial?",a:"Alleged attacks on US ships used to escalate Vietnam — later shown to be fabricated/exaggerated",opts:["A Chinese invasion of North Vietnam","Alleged attacks on US ships used to escalate Vietnam — later shown to be fabricated/exaggerated","A peace treaty the US refused to sign","A successful US military operation"],e:"LBJ used the Gulf of Tonkin incidents (Aug. 1964) to get Congress to authorize military force in Vietnam. Later evidence showed the second 'attack' likely never happened.",topic:"Cold War & Civil Rights"},
+  {q:"What is McCarthyism and what does it represent?",a:"Anti-communist witch hunt by Senator McCarthy — represents baseless accusation and political paranoia",opts:["A policy of military intervention in Asia","Anti-communist witch hunt by Senator McCarthy — represents baseless accusation and political paranoia","The US nuclear weapons program","A foreign policy of peaceful coexistence with the USSR"],e:"McCarthyism (early 1950s) refers to Senator Joseph McCarthy's campaign of accusing hundreds of Americans of communism with little evidence, ruining careers and creating a climate of fear.",topic:"Cold War & Civil Rights"}
+],
+chemistry: [
+  {q:"What is the difference between a homogeneous and heterogeneous mixture?",a:"Homogeneous is uniform throughout; heterogeneous has visible distinct parts",opts:["Homogeneous has layers; heterogeneous does not","They are the same thing","Homogeneous is uniform throughout; heterogeneous has visible distinct parts","Heterogeneous is a pure substance"],e:"Homogeneous mixtures look identical throughout (saltwater, air). Heterogeneous mixtures have visible different components (salad, sand in water).",topic:"Matter & Mixtures"},
+  {q:"What is a physical property vs. a chemical property?",a:"Physical: observable without changing composition; Chemical: describes how a substance reacts/changes",opts:["They mean the same thing","Physical: observable without changing composition; Chemical: describes how a substance reacts/changes","Physical requires a chemical reaction; Chemical does not","Physical properties only apply to solids"],e:"Physical properties (color, density, melting point) can be observed without changing the substance's identity. Chemical properties (flammability, reactivity) involve the substance transforming into something new.",topic:"Matter & Mixtures"},
+  {q:"What is the atomic number of an element equal to?",a:"The number of protons in the nucleus",opts:["Number of neutrons","Number of electrons + neutrons","The number of protons in the nucleus","Protons plus neutrons"],e:"The atomic number uniquely identifies an element — it equals the number of protons. In a neutral atom, it also equals the number of electrons.",topic:"Atoms & Ions"},
+  {q:"What is the atomic mass equal to?",a:"Protons plus neutrons (electrons have negligible mass)",opts:["Protons only","Electrons plus protons","Protons plus neutrons (electrons have negligible mass)","Neutrons only"],e:"Atomic mass ≈ protons + neutrons. Electrons are ~1/1836 the mass of a proton, so they are ignored in mass calculations.",topic:"Atoms & Ions"},
+  {q:"Which subatomic particle determines an element's chemical behavior?",a:"Electrons (specifically valence electrons)",opts:["Protons","Neutrons","Electrons (specifically valence electrons)","The nucleus as a whole"],e:"Electrons — especially the valence electrons in the outermost shell — determine how atoms bond and react. Same element, different electrons = different chemistry.",topic:"Atoms & Ions"},
+  {q:"What is the charge of a cation vs. an anion?",a:"Cation = positive (lost electrons); Anion = negative (gained electrons)",opts:["Cation = negative; Anion = positive","Both are positive","Cation = positive (lost electrons); Anion = negative (gained electrons)","Neither has a charge unless heated"],e:"Cations lose electrons → more protons than electrons → positive charge. Anions gain electrons → more electrons than protons → negative charge. Memory: cAt has a pAwsitive charge.",topic:"Atoms & Ions"},
+  {q:"Which form of electromagnetic radiation has the most energy?",a:"Gamma rays",opts:["Radio waves","Microwaves","Visible light","Gamma rays"],e:"Gamma rays have the highest frequency and shortest wavelength on the EM spectrum, giving them the highest energy. Energy and frequency have a direct (proportional) relationship.",topic:"Periodic Table"},
+  {q:"What are valence electrons and why do they matter?",a:"Electrons in the outermost shell — they determine bonding and reactivity",opts:["All electrons in an atom","Electrons in the nucleus","Electrons in the outermost shell — they determine bonding and reactivity","Only the electrons that participate in ionic bonding"],e:"Valence electrons are in the highest energy (outermost) shell. They are the electrons that form bonds and determine an element's reactivity. Group number = valence electron count (for main groups).",topic:"Periodic Table"},
+  {q:"Which element is the most reactive nonmetal? The most reactive metal?",a:"Most reactive nonmetal: Fluorine (F); Most reactive metal: Francium (Fr)",opts:["Chlorine and Sodium","Oxygen and Potassium","Most reactive nonmetal: Fluorine (F); Most reactive metal: Francium (Fr)","Nitrogen and Lithium"],e:"Fluorine (Group 17, Period 2) is most reactive nonmetal — extremely electronegative, needs 1 electron. Francium (Group 1, Period 7) is most reactive metal — easily loses its 1 valence electron.",topic:"Periodic Table"},
+  {q:"What is the Octet rule?",a:"Atoms tend to form bonds to achieve 8 valence electrons (full outer shell)",opts:["All atoms need exactly 2 electrons","Atoms always lose electrons in bonding","Atoms tend to form bonds to achieve 8 valence electrons (full outer shell)","The nucleus always has 8 protons"],e:"The Octet rule: atoms are most stable with 8 valence electrons (like noble gases). To reach this, atoms form ionic or covalent bonds by transferring or sharing electrons.",topic:"Bonding"},
+  {q:"What distinguishes ionic bonding from covalent bonding?",a:"Ionic: electrons transferred between atoms; Covalent: electrons shared between atoms",opts:["Ionic: electrons shared; Covalent: electrons transferred","Both involve electron sharing","Ionic: electrons transferred between atoms; Covalent: electrons shared between atoms","They are the same type of bond with different names"],e:"Ionic bonds: metal gives electrons to nonmetal → oppositely charged ions attract. Covalent bonds: two nonmetals share electrons. Key test: metal + nonmetal = ionic; nonmetal + nonmetal = covalent.",topic:"Bonding"},
+  {q:"What are the 7 diatomic elements?",a:"H₂, N₂, O₂, F₂, Cl₂, Br₂, I₂",opts:["He, Ne, Ar, Kr, Xe, Rn, Og","CO₂, NO₂, SO₂, HCl, H₂O, NH₃, CH₄","H₂, N₂, O₂, F₂, Cl₂, Br₂, I₂","Na, Mg, K, Ca, Fe, Cu, Zn"],e:"Seven elements always exist as diatomic molecules: H₂, N₂, O₂, F₂, Cl₂, Br₂, I₂. Memory trick: Have No Fear Of Cold Brown Ice.",topic:"Bonding"},
+  {q:"What is the formula for density and what is water's density?",a:"d = m/v (density = mass ÷ volume); water = 1.0 g/mL",opts:["d = m × v; water = 0.5 g/mL","d = v/m; water = 1.5 g/mL","d = m/v (density = mass ÷ volume); water = 1.0 g/mL","d = m + v; water = 2.0 g/mL"],e:"Density = mass ÷ volume. Water's density is exactly 1.0 g/mL, making it the standard reference point — objects denser than 1.0 g/mL sink, less dense objects float.",topic:"Moles & Calculations"},
+  {q:"How many moles are in 100g of water (H₂O)?",a:"≈ 5.55 moles (100 ÷ 18.015)",opts:["1 mole","10 moles","≈ 5.55 moles (100 ÷ 18.015)","18 moles"],e:"Molar mass of H₂O = 2(1.008) + 16.00 = 18.015 g/mol. Moles = mass ÷ molar mass = 100 ÷ 18.015 ≈ 5.55 moles.",topic:"Moles & Calculations"},
+  {q:"What is percent composition, and what is %C in Li₂CO₃?",a:"(mass of element / molar mass of compound) × 100; %C ≈ 16.2%",opts:["(moles / total mass) × 100; %C ≈ 8.1%","(# of atoms / total atoms) × 100; %C ≈ 25%","(mass of element / molar mass of compound) × 100; %C ≈ 16.2%","(atomic number / mass number) × 100; %C ≈ 32%"],e:"% composition = (mass of element/molar mass) × 100. Li₂CO₃ molar mass ≈ 74.01 g/mol. Carbon = 12.01 g. %C = 12.01/74.01 × 100 ≈ 16.2%.",topic:"Moles & Calculations"},
+  {q:"What does the Bohr model say about where electrons are found?",a:"Electrons orbit the nucleus in fixed energy levels (shells)",opts:["Electrons are randomly distributed throughout the atom","Electrons are found inside the nucleus","Electrons orbit the nucleus in fixed energy levels (shells)","Electrons form a diffuse cloud with no defined path"],e:"Niels Bohr (1913) proposed electrons occupy specific, fixed circular orbits (shells) around the nucleus. Energy is absorbed or emitted when electrons jump between shells.",topic:"Atoms & Ions"},
+  {q:"What is the molar mass of butane (C₄H₁₀)?",a:"≈ 58.12 g/mol",opts:["≈ 44.01 g/mol","≈ 50.08 g/mol","≈ 58.12 g/mol","≈ 64.14 g/mol"],e:"C₄H₁₀: 4 carbons × 12.011 = 48.044; 10 hydrogens × 1.008 = 10.08. Total = 58.12 g/mol.",topic:"Moles & Calculations"},
+  {q:"What determines whether a bond is ionic or covalent in practice?",a:"Ionic: metal bonded to nonmetal; Covalent: nonmetal bonded to nonmetal",opts:["Size of the atoms involved","Ionic: metal bonded to nonmetal; Covalent: nonmetal bonded to nonmetal","Temperature at which bonding occurs","Whether a catalyst is present"],e:"Quick practical rule: metal + nonmetal = ionic (electron transfer). Nonmetal + nonmetal = covalent (electron sharing). Exceptions exist but this covers the vast majority of cases.",topic:"Bonding"},
+  {q:"What is accuracy vs. precision in measurement?",a:"Accuracy = closeness to true value; Precision = consistency between repeated measurements",opts:["They mean the same thing","Accuracy = many decimal places; Precision = one measurement","Accuracy = closeness to true value; Precision = consistency between repeated measurements","Accuracy applies to rulers; Precision applies to scales"],e:"You can be precise but inaccurate (consistently wrong). You can be accurate but imprecise (average is right but individual measurements vary). The ideal is both.",topic:"Matter & Mixtures"},
+  {q:"What is the charge of an Na ion and a Cl ion?",a:"Na⁺ (loses 1 electron); Cl⁻ (gains 1 electron)",opts:["Na⁻ and Cl⁺","Both are +1","Na⁺ (loses 1 electron); Cl⁻ (gains 1 electron)","Na²⁺ and Cl²⁻"],e:"Na has 1 valence electron — loses it to become Na⁺. Cl has 7 valence electrons — gains 1 to complete octet, becoming Cl⁻. Together they form NaCl (table salt) via ionic bonding.",topic:"Atoms & Ions"}
+],
+math: [
+  {q:"What is the compound interest formula for semi-annual compounding?",a:"A = P(1 + r/2)^(2t)",opts:["A = P(1 + r)^t","A = P(1 + r/2)^(2t)","A = P·e^(rt)","A = P(1 + r/4)^(4t)"],e:"For semi-annual compounding, n = 2: A = P(1 + r/2)^(2t). For quarterly: n=4. For monthly: n=12. General formula: A = P(1 + r/n)^(nt).",topic:"Compound Interest"},
+  {q:"Find the inverse of y = 3x + 5",a:"y = (x − 5)/3",opts:["y = 3x − 5","y = (x + 5)/3","y = (x − 5)/3","y = x/3 + 5"],e:"To find the inverse: (1) swap x and y: x = 3y + 5. (2) Solve for y: x − 5 = 3y, so y = (x−5)/3. The inverse is f⁻¹(x) = (x−5)/3.",topic:"Functions & Inverses"},
+  {q:"Find the inverse of y = (x − 2)² + 1",a:"y = √(x − 1) + 2",opts:["y = √(x + 1) + 2","y = √(x − 1) + 2","y = −√(x − 1) + 2","y = (x + 2)² − 1"],e:"Swap x and y: x = (y−2)² + 1. Solve: x−1 = (y−2)², √(x−1) = y−2, so y = √(x−1) + 2. (Taking positive root for the principal branch.)",topic:"Functions & Inverses"},
+  {q:"Given f(x) = 2x − 1 and g(x) = x² − 4, find f(g(2))",a:"f(g(2)) = −1",opts:["3","0","−1","7"],e:"Step 1: g(2) = (2)² − 4 = 4 − 4 = 0. Step 2: f(0) = 2(0) − 1 = −1. Always evaluate the inner function first when composing.",topic:"Functions & Inverses"},
+  {q:"Simplify: −5√12 + 2√27",a:"−4√3",opts:["−10√3","4√3","−4√3","2√3"],e:"−5√12 = −5·2√3 = −10√3. 2√27 = 2·3√3 = 6√3. Combined: −10√3 + 6√3 = −4√3.",topic:"Radicals"},
+  {q:"Simplify: (2√5 + 2)(4√5 − 5)",a:"30 − 2√5",opts:["40 − 10","30 − 2√5","30 + 2√5","8·5 − 10"],e:"FOIL: (2√5)(4√5) = 8·5 = 40. (2√5)(−5) = −10√5. (2)(4√5) = 8√5. (2)(−5) = −10. Total: 40 − 10 + (−10√5 + 8√5) = 30 − 2√5.",topic:"Radicals"},
+  {q:"Solve: √(2x + 7) = √(5x − 11)",a:"x = 6",opts:["x = 3","x = 4","x = 6","x = 9"],e:"Square both sides: 2x + 7 = 5x − 11. Solve: 7 + 11 = 5x − 2x → 18 = 3x → x = 6. Always verify: √19 = √19 ✓",topic:"Radicals"},
+  {q:"What is the vertex of y = (x − 3)² − 5?",a:"(3, −5)",opts:["(−3, 5)","(3, 5)","(3, −5)","(−3, −5)"],e:"Vertex form y = a(x−h)² + k has vertex (h, k). Here h = 3, k = −5, so vertex = (3, −5). The parabola opens upward since a = 1 > 0.",topic:"Polynomials"},
+  {q:"Factor completely: 2x² + 7x − 15",a:"(2x − 3)(x + 5)",opts:["(2x + 3)(x − 5)","(2x − 3)(x + 5)","(x + 3)(2x − 5)","(2x + 5)(x − 3)"],e:"Find factors of ac = (2)(−15) = −30 that sum to 7: 10 and −3. Rewrite: 2x² + 10x − 3x − 15 = 2x(x+5) − 3(x+5) = (2x−3)(x+5).",topic:"Polynomials"},
+  {q:"Solve: x² + 8x − 20 = 0",a:"x = 2 or x = −10",opts:["x = 4 or x = −5","x = 2 or x = −10","x = −2 or x = 10","x = 5 or x = −4"],e:"Factor: what two numbers multiply to −20 and add to 8? 10 and −2. So (x + 10)(x − 2) = 0. Solutions: x = −10 or x = 2.",topic:"Polynomials"},
+  {q:"Factor: x² − 64",a:"(x + 8)(x − 8)",opts:["(x − 8)²","(x + 8)(x − 8)","(x + 32)(x − 2)","Cannot be factored"],e:"Difference of squares: a² − b² = (a+b)(a−b). Here a = x, b = 8 (since 8² = 64). So x² − 64 = (x+8)(x−8).",topic:"Polynomials"},
+  {q:"Is the sequence −6, 3, 0, 3, ... arithmetic, geometric, or neither?",a:"Neither",opts:["Arithmetic","Geometric","Neither","Both arithmetic and geometric"],e:"Arithmetic check: differences are 9, −3, 3 — not constant. Geometric check: ratios are −0.5, 0, undefined — not constant. Therefore: neither.",topic:"Sequences & Systems"},
+  {q:"Find the nth term rule for: 9, 13, 17, 21, ...",a:"aₙ = 4n + 5",opts:["aₙ = 4n + 9","aₙ = 4n + 5","aₙ = 9n − 4","aₙ = 5n + 4"],e:"Common difference d = 4. Formula: aₙ = a₁ + (n−1)d = 9 + (n−1)(4) = 9 + 4n − 4 = 4n + 5. Verify: n=1 → 9 ✓, n=2 → 13 ✓.",topic:"Sequences & Systems"},
+  {q:"How many solutions does the system have: 2x + y = 3 and 6x + 3y = 9?",a:"Infinitely many solutions (same line)",opts:["No solution","Exactly one solution","Infinitely many solutions (same line)","Exactly two solutions"],e:"Multiply equation 1 by 3: 6x + 3y = 9 — identical to equation 2. The lines are the same, so every point on the line is a solution: infinitely many.",topic:"Sequences & Systems"},
+  {q:"What is the transformation of y = (x − 3)² − 5 compared to y = x²?",a:"Shifted right 3 and down 5",opts:["Shifted left 3 and up 5","Shifted right 3 and down 5","Shifted left 3 and down 5","Stretched vertically by factor of 3"],e:"In vertex form y = a(x−h)² + k: h shifts horizontally (positive h → right), k shifts vertically (negative k → down). h = 3 → right 3; k = −5 → down 5.",topic:"Polynomials"},
+  {q:"What does the model P = 6191(1.03)^t represent?",a:"Exponential growth: population of 6,191 growing at 3% per year",opts:["Linear growth of 6,191 people per year","Exponential decay of 3% per year","Exponential growth: population of 6,191 growing at 3% per year","Logarithmic growth starting at 6,191"],e:"This is the exponential growth model A = P(1+r)^t. Initial population P₀ = 6,191; r = 0.03 = 3% annual growth rate. For 2030 (30 years after 2000): P = 6191(1.03)³⁰.",topic:"Compound Interest"},
+  {q:"Solve: x/(x−4) = 4/(x−4)",a:"No solution (x = 4 is extraneous)",opts:["x = 4","x = 0","No solution (x = 4 is extraneous)","x = −4"],e:"Cross multiply: x(x−4) = 4(x−4). Divide by (x−4): x = 4. BUT x = 4 makes the denominator zero → undefined. So x = 4 is extraneous. No solution.",topic:"Radicals"},
+  {q:"Simplify: (x³y)(x⁻²y⁻³)³",a:"x⁻³y⁻⁸ = 1/(x³y⁸)",opts:["x⁵y⁻⁸","x⁻³y⁻⁸ = 1/(x³y⁸)","xy⁻⁸","x³y⁸"],e:"First: (x⁻²y⁻³)³ = x⁻⁶y⁻⁹. Then multiply: x³·x⁻⁶ = x^(3−6) = x⁻³ and y·y⁻⁹ = y^(1−9) = y⁻⁸. Result: x⁻³y⁻⁸ = 1/(x³y⁸).",topic:"Functions & Inverses"},
+  {q:"What name describes the degree of y = 3x⁴ − 5x⁵ + 2x² − 9?",a:"Quintic (degree 5)",opts:["Quartic (degree 4)","Quintic (degree 5)","Cubic (degree 3)","Sextic (degree 6)"],e:"Degree = highest exponent. The term −5x⁵ has the highest power (5), making this a quintic polynomial. Standard form: −5x⁵ + 3x⁴ + 2x² − 9.",topic:"Polynomials"},
+  {q:"Solve: 3x² − 24x + 36 = 0",a:"x = 2 or x = 6",opts:["x = 3 or x = 4","x = 2 or x = 6","x = −2 or x = −6","x = 6 only"],e:"Divide by 3: x² − 8x + 12 = 0. Factor: (x − 2)(x − 6) = 0. So x = 2 or x = 6. Always factor out the GCF first to simplify.",topic:"Polynomials"},
+  {q:"Find the nth term for the sequence 3, 9, 27, 81, ...",a:"aₙ = 3ⁿ (geometric with ratio 3)",opts:["aₙ = 3n","aₙ = n³","aₙ = 3ⁿ (geometric with ratio 3)","aₙ = 3n + 0"],e:"Common ratio r = 9/3 = 3. This is geometric. Formula: aₙ = a₁·r^(n−1) = 3·3^(n−1) = 3¹·3^(n−1) = 3ⁿ.",topic:"Sequences & Systems"}
+],
+};
+
+const FLASH = {
+english: [
+  {q:"What is a soliloquy?",a:"A speech where a character speaks their private thoughts aloud while alone on stage — the audience hears what others cannot."},
+  {q:"What is dramatic irony?",a:"When the audience knows something that a character does not — creates tension, humor, or tragedy."},
+  {q:"What is a foil character?",a:"A character whose contrasting traits highlight or emphasize qualities in another character (e.g., Banquo foils Macbeth)."},
+  {q:"What is a simile vs. a metaphor?",a:"Simile compares using 'like' or 'as.' Metaphor states a direct comparison without those words. Both are types of figurative language."},
+  {q:"What is an allusion?",a:"A reference to another well-known work, person, event, or place — it enriches meaning by connecting to shared cultural knowledge."},
+  {q:"What is a caesura?",a:"A deliberate pause or break within a line of poetry, often marked by punctuation. Common in Anglo-Saxon verse."},
+  {q:"What is catharsis?",a:"The emotional release or purification felt by an audience at the end of a tragedy — Aristotle's concept central to understanding tragic drama."},
+  {q:"What is a double entendre?",a:"A phrase with two interpretations — one typically innocent, one typically risqué or ironic. Common in Shakespeare."},
+  {q:"What is paradox vs. irony?",a:"Paradox: a statement that seems contradictory but reveals a truth ('the more you know, the less you know'). Irony: a gap between expectation and reality."},
+  {q:"What is conceit in poetry?",a:"An elaborate, extended metaphor or comparison between two very unlike things. Common in Metaphysical poetry."},
+  {q:"Spenserian sonnet rhyme scheme?",a:"ABAB BCBC CDCD EE — the quatrains are linked by shared rhymes, creating more unity than the Shakespearean form."},
+  {q:"What is a kenning?",a:"A compound metaphorical expression used in Anglo-Saxon poetry as a poetic substitute for a noun (e.g., 'whale-road' = sea)."},
+],
+history: [
+  {q:"What was the Harlem Renaissance?",a:"A 1920s explosion of African American art, literature, music, and culture centered in Harlem, NYC — celebrating Black identity and heritage."},
+  {q:"What was the Great Migration?",a:"The movement of millions of African Americans from the rural South to Northern and Midwestern cities (1910–1970) to escape Jim Crow and seek jobs."},
+  {q:"What was the Dust Bowl?",a:"A 1930s ecological disaster caused by severe drought + poor farming practices, creating massive dust storms across the Great Plains and displacing 'Okies.'"},
+  {q:"What was the New Deal?",a:"FDR's series of programs, projects, and reforms (1933–39) aimed at Relief, Recovery, and Reform from the Great Depression."},
+  {q:"What was the Atlantic Charter (1941)?",a:"A joint declaration by FDR and Churchill outlining Allied post-war goals: self-determination, free trade, collective security, and disarmament."},
+  {q:"What was the Truman Doctrine?",a:"1947 US policy to provide political, military, and economic support to countries threatened by communism — the basis of Cold War containment."},
+  {q:"What was the Korean War's result?",a:"Stalemate — after 3 years and ~36,000 US deaths, Korea remained divided at the 38th parallel, essentially unchanged from where the war started."},
+  {q:"What was the baby boom?",a:"A dramatic increase in birth rates following WWII (1946–1964) — the massive generation born during this period shaped American culture for decades."},
+  {q:"What was the GI Bill?",a:"The Servicemen's Readjustment Act (1944) gave WWII veterans college funding, low-cost mortgages, and job training — helping create the postwar middle class."},
+  {q:"What was M.A.D.?",a:"Mutually Assured Destruction — the Cold War doctrine that nuclear war would destroy both sides, paradoxically deterring either from launching a first strike."},
+  {q:"What was the Berlin Airlift?",a:"1948–49 US/Allied operation airlifting supplies to West Berlin after the Soviet Union blockaded land routes — the West's first Cold War victory."},
+  {q:"What was 'Return to Normalcy'?",a:"Harding's 1920 campaign slogan promising a return to pre-WWI American life: isolationism, high tariffs, limited immigration, and conservative values."},
+],
+chemistry: [
+  {q:"What are the 3 states of matter and their particle arrangements?",a:"Solid: tightly packed, vibrate in place. Liquid: close together, can flow. Gas: far apart, move freely."},
+  {q:"What is the difference between accuracy and precision?",a:"Accuracy = how close a measurement is to the true/accepted value. Precision = how consistent repeated measurements are to each other."},
+  {q:"What is an isotope?",a:"Atoms of the same element (same proton count) but with different numbers of neutrons — same atomic number, different mass number."},
+  {q:"What is electronegativity?",a:"An atom's tendency to attract electrons toward itself in a chemical bond. Fluorine has the highest electronegativity (4.0 on Pauling scale)."},
+  {q:"What are noble gases and why are they unreactive?",a:"Group 18 elements (He, Ne, Ar, Kr, Xe, Rn) with completely full outer shells — no need to gain, lose, or share electrons."},
+  {q:"What is a polyatomic ion?",a:"An ion made of two or more atoms bonded together carrying an overall charge. Examples: NO₃⁻ (nitrate), SO₄²⁻ (sulfate), NH₄⁺ (ammonium)."},
+  {q:"What is the difference between an element, compound, and mixture?",a:"Element: one type of atom (pure). Compound: chemically bonded elements in fixed ratios. Mixture: physically combined substances (variable ratios, separable)."},
+  {q:"What is molar mass?",a:"The mass of one mole (6.022 × 10²³ particles) of a substance in grams — numerically equal to the atomic/molecular mass in amu."},
+  {q:"What is the Schrödinger model of the atom?",a:"Electrons exist in probability clouds called orbitals — regions where electrons are most likely to be found. Replaced the Bohr model's fixed circular orbits."},
+  {q:"What is the octet rule exception for noble gases?",a:"Noble gases (Group 18) already have 8 valence electrons (He has 2) — they are stable without bonding, making them chemically inert."},
+  {q:"What determines if a mixture is homogeneous or heterogeneous?",a:"Uniformity: homogeneous looks the same everywhere at the molecular level (e.g., air, saltwater). Heterogeneous has visibly distinct phases (e.g., salad, concrete)."},
+  {q:"What is percent composition?",a:"The percentage by mass of each element in a compound. Formula: (mass of element / molar mass of compound) × 100%."},
+],
+math: [
+  {q:"What is the difference between arithmetic and geometric sequences?",a:"Arithmetic: add a constant difference (d) each term. Geometric: multiply by a constant ratio (r) each term."},
+  {q:"What is vertex form of a quadratic equation?",a:"y = a(x − h)² + k, where (h, k) is the vertex, a determines direction and width of the parabola."},
+  {q:"How do you find the inverse of a function?",a:"Swap x and y in the equation, then solve algebraically for y. The result is f⁻¹(x)."},
+  {q:"What is function composition f(g(x))?",a:"Plug g(x) into f: substitute the entire g(x) expression wherever x appears in f. Always evaluate the inner function first."},
+  {q:"How many solutions can a linear system of equations have?",a:"One (lines intersect at a point), none (parallel lines, no intersection), or infinitely many (same line, every point is a solution)."},
+  {q:"What is the difference of squares formula?",a:"a² − b² = (a + b)(a − b). Used to quickly factor expressions like x² − 49 = (x+7)(x−7)."},
+  {q:"What is exponential growth vs. exponential decay?",a:"Growth: A = P(1+r)^t where r > 0 (population growth, compound interest). Decay: A = P(1−r)^t where 0 < r < 1 (depreciation, radioactive decay)."},
+  {q:"How do you simplify a radical like √48?",a:"Factor out perfect squares: √48 = √(16 × 3) = √16 · √3 = 4√3. Always look for the largest perfect square factor."},
+  {q:"What makes a rational expression undefined?",a:"When the denominator equals zero. Always state restrictions on the domain by setting the denominator ≠ 0."},
+  {q:"What is an extraneous solution?",a:"A solution that satisfies the transformed equation but not the original — appears when squaring both sides or multiplying by variable expressions. Always check your answers."},
+  {q:"What is the FOIL method?",a:"A way to multiply two binomials: First, Outer, Inner, Last. (a+b)(c+d) = ac + ad + bc + bd."},
+  {q:"What does the leading coefficient tell you about a polynomial?",a:"Its sign tells you end behavior: positive → rises right; negative → falls right. Its value affects how narrow or wide the graph is."},
+],
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  screen: 'home',
+  subject: null,
+  mode: null,
+  isMega: false,
+  qs: [],
+  qIdx: 0,
+  score: 0,
+  answered: false,
+  selected: null,
+  results: [],
+  flashIdx: 0,
+  flashFlipped: false,
+  flashKnown: {},
+  timerInterval: null,
+  timerSec: 30,
+  timerMax: 30,
+  progress: { english: 0, history: 0, chemistry: 0, math: 0, mega: 0 }
+};
+
+// Load progress from localStorage
+try {
+  const saved = localStorage.getItem('studyProgress');
+  if (saved) state.progress = JSON.parse(saved);
+} catch(e) {}
+
+function saveProgress() {
+  try { localStorage.setItem('studyProgress', JSON.stringify(state.progress)); } catch(e) {}
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+const app = document.getElementById('app');
+
+function render() {
+  if (state.screen === 'home') app.innerHTML = renderHome();
+  else if (state.screen === 'mode') app.innerHTML = renderMode();
+  else if (state.screen === 'quiz') app.innerHTML = renderQuiz();
+  else if (state.screen === 'mega') app.innerHTML = renderMegaQuiz();
+  else if (state.screen === 'flash') app.innerHTML = renderFlash();
+  else if (state.screen === 'score') app.innerHTML = renderScore();
+  attachEvents();
+}
+
+// ============================================================
+// HOME
+// ============================================================
+function renderHome() {
+  const totalQ = Object.values(QUIZ).reduce((s,a) => s+a.length, 0);
+  const totalF = Object.values(FLASH).reduce((s,a) => s+a.length, 0);
+  const cards = Object.entries(SUBJECTS).map(([k, s]) => {
+    const pct = Math.round(state.progress[k] || 0);
+    return `
+    <div class="subj-card" data-subj="${k}" tabindex="0" role="button" aria-label="Study ${s.name}">
+      <div class="subj-card-top">
+        <span class="subj-icon" aria-hidden="true">${s.icon}</span>
+        <span class="subj-badge subj-badge-${s.color}">${s.short}</span>
+      </div>
+      <div class="subj-name">${s.name}</div>
+      <div class="subj-meta">${QUIZ[k].length} questions · ${FLASH[k].length} flashcards</div>
+      <div class="subj-progress-bar" title="Best score: ${pct}%">
+        <div class="subj-progress-fill fill-${s.color}" style="width:${pct}%"></div>
+      </div>
+      <div class="subj-actions" onclick="event.stopPropagation()">
+        <button class="subj-action-btn" data-subj="${k}" data-mode="quiz">🎯 Quiz</button>
+        <button class="subj-action-btn" data-subj="${k}" data-mode="flash">🃏 Cards</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="home-screen">
+    <div class="home-header">
+      <div class="home-eyebrow">Final exam prep · 2026</div>
+      <h1 class="home-title">Ashton Mathis's<br>Study Hub</h1>
+      <p class="home-subtitle">Your personal study hub — ace all four finals with quizzes, flashcards, and instant explanations.</p>
+    </div>
+    <div class="stats-row">
+      <div class="stat-pill"><strong>${totalQ}</strong> quiz questions</div>
+      <div class="stat-pill"><strong>${totalF}</strong> flashcards</div>
+      <div class="stat-pill"><strong>4</strong> subjects</div>
+      <div class="stat-pill">⏱ 30s timer</div>
+    </div>
+    <div class="subject-grid">${cards}</div>
+    <div class="mega-card" id="mega-quiz-btn" tabindex="0" role="button" aria-label="All subjects mega quiz">
+      <div class="mega-card-left">
+        <div class="mega-icon">🌟</div>
+        <div>
+          <div class="mega-title">All Subjects — Mega Quiz</div>
+          <div class="mega-sub">Randomized questions from every subject · ${totalQ} total questions in the pool · 20 per session</div>
+          <div class="mega-tags">
+            <span class="mega-tag" style="color:var(--eng)">📖 English</span>
+            <span class="mega-tag" style="color:var(--his)">🗽 History</span>
+            <span class="mega-tag" style="color:var(--chem)">⚗️ Chemistry</span>
+            <span class="mega-tag" style="color:var(--math)">📐 Algebra 2</span>
+            ${state.progress.mega ? `<span class="mega-tag" style="color:#fcd34d">Best: ${state.progress.mega}%</span>` : ''}
+          </div>
+        </div>
+      </div>
+      <div class="mega-arrow">→</div>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// MODE SELECT
+// ============================================================
+function renderMode() {
+  const s = SUBJECTS[state.subject];
+  return `
+  <div class="screen">
+    <div class="screen-header">
+      ${backBtn()}
+      <span class="header-badge subj-badge-${s.color}">${s.icon} ${s.name}</span>
+    </div>
+    <div class="screen-body">
+      <div class="mode-title">${s.name}</div>
+      <div class="mode-subtitle">Topics: ${s.topics.join(' · ')}</div>
+      <div class="mode-grid">
+        <div class="mode-card" id="start-quiz" tabindex="0" role="button">
+          <div class="big-icon">🎯</div>
+          <h3>Quiz mode</h3>
+          <p>Multiple choice with instant feedback and detailed explanations. Timer included.</p>
+        </div>
+        <div class="mode-card" id="start-flash" tabindex="0" role="button">
+          <div class="big-icon">🃏</div>
+          <h3>Flashcards</h3>
+          <p>Flip through key terms and concepts. Mark cards you know or need to review.</p>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// MEGA QUIZ SCREEN (all subjects combined)
+// ============================================================
+function renderMegaQuiz() {
+  const q = state.qs[state.qIdx];
+  const total = state.qs.length;
+  const pct = (state.qIdx / total * 100).toFixed(1);
+  const timerPct = (state.timerSec / state.timerMax * 100).toFixed(1);
+  const subj = SUBJECTS[q.subj];
+
+  const gradBar = `background: linear-gradient(90deg, var(--eng) 0%, var(--his) 33%, var(--chem) 66%, var(--math) 100%)`;
+
+  const dots = state.results.map(r =>
+    `<div class="streak-dot ${r ? 'correct-dot' : 'wrong-dot'}"></div>`
+  ).join('') + Array(Math.max(0, total - state.results.length)).fill(`<div class="streak-dot empty-dot"></div>`).join('');
+
+  const shuffledOpts2 = q._shuffled || q.opts;
+  const opts = shuffledOpts2.map((o, i) => {
+    let cls = 'opt-btn';
+    if (state.answered) {
+      if (o === q.a) cls += ' correct';
+      else if (state.selected === o) cls += ' wrong';
+    }
+    const letter = ['A','B','C','D'][i];
+    return `<button class="${cls}" data-opt="${i}" ${state.answered ? 'disabled' : ''}><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);margin-right:8px">${letter}</span>${o}</button>`;
+  }).join('');
+
+  const feedback = state.answered ? `
+    <div class="feedback-box ${state.selected === q.a ? 'correct' : 'wrong'}">
+      <div class="feedback-label">${state.selected === q.a ? '✓ Correct!' : '✗ Incorrect'}</div>
+      ${q.e}
+    </div>` : '';
+
+  return `
+  <div class="screen">
+    <div class="screen-header">
+      ${backBtn()}
+      <span class="header-badge" style="background:linear-gradient(135deg,rgba(192,132,252,0.2),rgba(96,165,250,0.2));color:var(--text)">🌟 All Subjects</span>
+      <div class="header-right">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted)">${state.qIdx+1}/${total}</span>
+        <span class="score-val" style="color:#fcd34d">${state.score}</span>
+      </div>
+    </div>
+    <div class="screen-body">
+      <div class="quiz-progress-track">
+        <div class="quiz-progress-fill" style="width:${pct}%;${gradBar}"></div>
+      </div>
+      ${!state.answered ? `<div class="timer-bar-wrap"><div class="timer-bar" id="timer-bar" style="background:${subj.accent};width:${timerPct}%"></div></div>` : ''}
+      <div style="text-align:center;margin-bottom:0.5rem">
+        <span class="q-subject-label subj-badge-${subj.color}">${subj.icon} ${subj.short}</span>
+      </div>
+      <div class="q-number">Question ${state.qIdx+1} of ${total} · ${q.topic || subj.short}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options-grid">${opts}</div>
+      ${feedback}
+      ${state.answered ? `<button class="next-btn" id="next-q" style="background:linear-gradient(135deg,var(--eng),var(--math));color:#000;font-weight:700">${state.qIdx+1 < total ? 'Next question →' : 'See your results'}</button>` : ''}
+      <div class="streak-bar" style="margin-top:1.5rem">${dots}</div>
+      ${!state.answered ? `<div class="tooltip">Press <span class="kbd">A</span> <span class="kbd">B</span> <span class="kbd">C</span> <span class="kbd">D</span> to answer</div>` : ''}
+    </div>
+  </div>`;
+}
+
+
+function renderQuiz() {
+  const s = SUBJECTS[state.subject];
+  const q = state.qs[state.qIdx];
+  const total = state.qs.length;
+  const pct = (state.qIdx / total * 100).toFixed(1);
+  const timerPct = (state.timerSec / state.timerMax * 100).toFixed(1);
+  const timerColor = state.timerSec <= 8 ? '#f87171' : state.timerSec <= 15 ? var_color(s, 0.8) : s.accent;
+
+  const dots = state.results.map(r =>
+    `<div class="streak-dot ${r ? 'correct-dot' : 'wrong-dot'}" title="${r ? 'Correct' : 'Wrong'}"></div>`
+  ).join('') + Array(Math.max(0, total - state.results.length)).fill(`<div class="streak-dot empty-dot"></div>`).join('');
+
+  const shuffledOpts = q._shuffled || q.opts;
+  const opts = shuffledOpts.map((o, i) => {
+    let cls = 'opt-btn';
+    if (state.answered) {
+      if (o === q.a) cls += ' correct';
+      else if (state.selected === o) cls += ' wrong';
+    }
+    const letter = ['A','B','C','D'][i];
+    return `<button class="${cls}" data-opt="${i}" ${state.answered ? 'disabled' : ''}><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);margin-right:8px">${letter}</span>${o}</button>`;
+  }).join('');
+
+  const feedback = state.answered ? `
+    <div class="feedback-box ${state.selected === q.a ? 'correct' : 'wrong'}">
+      <div class="feedback-label">${state.selected === q.a ? '✓ Correct!' : '✗ Incorrect'}</div>
+      ${q.e}
+    </div>` : '';
+
+  const nextBtnLabel = state.qIdx + 1 < total ? 'Next question →' : 'See your results';
+
+  return `
+  <div class="screen">
+    <div class="screen-header">
+      ${backBtn()}
+      <span class="header-badge subj-badge-${s.color}">${s.icon} ${s.name}</span>
+      <div class="header-right">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted)">${state.qIdx+1}/${total}</span>
+        <span class="score-val c-${s.color}">${state.score}</span>
+      </div>
+    </div>
+    <div class="screen-body">
+      <div class="quiz-progress-track">
+        <div class="quiz-progress-fill bg-${s.color}" style="width:${pct}%"></div>
+      </div>
+      ${!state.answered ? `<div class="timer-bar-wrap"><div class="timer-bar" id="timer-bar" style="background:${s.accent};width:${timerPct}%"></div></div>` : ''}
+      <div class="q-number">Question ${state.qIdx+1} of ${total} · ${q.topic || s.short}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options-grid">${opts}</div>
+      ${feedback}
+      ${state.answered ? `<button class="next-btn bg-${s.color}" id="next-q" style="color:#000">${nextBtnLabel} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>` : ''}
+      <div class="streak-bar" style="margin-top:1.5rem">${dots}</div>
+      ${!state.answered ? `<div class="tooltip">Press <span class="kbd">A</span> <span class="kbd">B</span> <span class="kbd">C</span> <span class="kbd">D</span> to answer · <span class="kbd">Space</span> to skip</div>` : ''}
+    </div>
+  </div>`;
+}
+
+function var_color(s, opacity = 1) { return s.accent; }
+
+// ============================================================
+// FLASHCARDS
+// ============================================================
+function renderFlash() {
+  const s = SUBJECTS[state.subject];
+  const cards = FLASH[state.subject];
+  const c = cards[state.flashIdx];
+  const known = state.flashKnown[state.flashIdx];
+  const knownCount = Object.values(state.flashKnown).filter(Boolean).length;
+
+  const dots = cards.map((_, i) => {
+    const isKnown = state.flashKnown[i];
+    const isActive = i === state.flashIdx;
+    const dotColor = isActive ? 'var(--text)' : isKnown ? 'var(--correct)' : 'var(--surface3)';
+    return `<div class="flash-dot ${isActive ? 'active' : ''}" style="${isActive?'':`background:${dotColor}`}"></div>`;
+  }).join('');
+
+  return `
+  <div class="screen">
+    <div class="screen-header">
+      ${backBtn()}
+      <span class="header-badge subj-badge-${s.color}">${s.icon} Flashcards</span>
+      <div class="header-right">
+        <span style="font-size:12px;color:var(--correct)">${knownCount}/${cards.length} known</span>
+      </div>
+    </div>
+    <div class="screen-body">
+      <div class="flash-counter">Card ${state.flashIdx + 1} of ${cards.length}</div>
+      <div class="flashcard-wrapper" id="flip-card" tabindex="0" role="button" aria-label="Click to flip flashcard">
+        <div class="flashcard-inner ${state.flashFlipped ? 'flipped' : ''}">
+          <div class="flashcard-face flashcard-front">
+            <div class="flashcard-label">Question</div>
+            <div class="flashcard-text">${c.q}</div>
+            <div class="flash-hint">↩ Click or press <span class="kbd">Space</span> to reveal</div>
+          </div>
+          <div class="flashcard-face flashcard-back">
+            <div class="flashcard-label" style="color:var(--c-${s.color})">Answer</div>
+            <div class="flashcard-answer">${c.a}</div>
+          </div>
+        </div>
+      </div>
+      ${state.flashFlipped ? `
+      <div class="flash-mark-row">
+        <button class="flash-mark-btn mark-dontknow" id="mark-no">✗ Still learning</button>
+        <button class="flash-mark-btn mark-know" id="mark-yes">✓ Got it!</button>
+      </div>` : ''}
+      <div class="flash-nav" style="margin-top:1rem">
+        <button class="flash-nav-btn" id="prev-flash" ${state.flashIdx === 0 ? 'disabled' : ''}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Prev
+        </button>
+        <div class="flash-dots">${dots}</div>
+        <button class="flash-nav-btn" id="next-flash" ${state.flashIdx === cards.length - 1 ? 'disabled' : ''}>
+          Next <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      ${knownCount === cards.length ? `
+      <div style="text-align:center;margin-top:1rem">
+        <div style="font-size:1.5rem">🎉</div>
+        <div style="font-size:14px;color:var(--correct);font-weight:500;margin-top:4px">You know all ${cards.length} cards!</div>
+      </div>` : ''}
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// SCORE
+// ============================================================
+function renderScore() {
+  const isMega = state.isMega;
+  const s = isMega ? null : SUBJECTS[state.subject];
+  const accentColor = isMega ? '#fcd34d' : s.accent;
+  const colorClass = isMega ? '' : `c-${s.color}`;
+  const bgClass = isMega ? '' : `bg-${s.color}`;
+  const total = state.qs.length;
+  const pct = Math.round(state.score / total * 100);
+  const circumference = 2 * Math.PI * 65;
+
+  let title, msg, emoji;
+  if (pct >= 90) { title = "Outstanding!"; msg = "You've mastered this material. You're ready for the exam."; emoji = "🏆"; }
+  else if (pct >= 75) { title = "Great work!"; msg = "Solid performance! Review the few you missed and you'll be set."; emoji = "⭐"; }
+  else if (pct >= 60) { title = "Good effort"; msg = "You're on the right track. Review the explanations and try again."; emoji = "📚"; }
+  else { title = "Keep going!"; msg = "More practice will get you there. Flashcards might help reinforce the basics."; emoji = "💪"; }
+
+  const wrongQs = state.results.map((r, i) => ({ correct: r, q: state.qs[i] })).filter(x => !x.correct);
+  const missedRows = wrongQs.slice(0, 5).map(x => {
+    const tag = x.q.subj ? `<span style="font-size:10px;color:var(--${SUBJECTS[x.q.subj].color})">${SUBJECTS[x.q.subj].icon}</span> ` : '';
+    return `<tr class="wrong-row">
+      <td style="color:var(--text-muted)">${tag}${x.q.q.length > 50 ? x.q.q.slice(0,47)+'…' : x.q.q}</td>
+      <td style="color:var(--correct)">${x.q.a.length > 38 ? x.q.a.slice(0,35)+'…' : x.q.a}</td>
+    </tr>`;
+  }).join('');
+
+  const retryBtn = isMega
+    ? `<button class="score-action-btn primary" id="retry-quiz" style="background:linear-gradient(135deg,var(--eng),var(--math));color:#000;border:none">Retake Mega Quiz</button>`
+    : `<button class="score-action-btn primary ${bgClass}" id="retry-quiz" style="color:#000;border:none">Retake quiz</button>`;
+
+  return `
+  <div class="score-screen">
+    <div style="font-size:2.5rem;margin-bottom:1rem">${emoji}</div>
+    ${isMega ? `<div style="font-size:12px;font-family:'DM Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.75rem">🌟 All Subjects Mega Quiz</div>` : ''}
+    <div class="score-ring-wrap">
+      <svg class="score-ring-svg" viewBox="0 0 160 160">
+        <circle class="score-ring-bg" cx="80" cy="80" r="65"/>
+        <circle class="score-ring-fill" id="score-ring" cx="80" cy="80" r="65" stroke="${accentColor}" stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}"/>
+      </svg>
+      <div class="score-center">
+        <div class="score-pct ${colorClass}" id="score-pct-text" style="${isMega?'color:#fcd34d':''}">0%</div>
+        <div class="score-label-sm">score</div>
+      </div>
+    </div>
+    <div class="score-title">${title}</div>
+    <div class="score-message">${msg}</div>
+    <div class="score-breakdown">
+      <div class="score-stat-row"><span class="score-stat-label">Questions answered</span><span class="score-stat-val">${total}</span></div>
+      <div class="score-stat-row"><span class="score-stat-label">Correct</span><span class="score-stat-val" style="color:var(--correct)">${state.score}</span></div>
+      <div class="score-stat-row"><span class="score-stat-label">Incorrect</span><span class="score-stat-val" style="color:var(--wrong)">${total - state.score}</span></div>
+      <div class="score-stat-row"><span class="score-stat-label">Percentage</span><span class="score-stat-val" style="color:${accentColor}">${pct}%</span></div>
+    </div>
+    ${wrongQs.length > 0 ? `
+    <div class="score-breakdown">
+      <div style="font-size:13px;font-weight:600;margin-bottom:0.75rem;color:var(--text-muted)">Review — questions you missed</div>
+      <table class="summary-table">
+        <thead><tr><th>Question</th><th>Correct answer</th></tr></thead>
+        <tbody>${missedRows}</tbody>
+      </table>
+      ${wrongQs.length > 5 ? `<div style="font-size:12px;color:var(--text-dim);margin-top:8px">+${wrongQs.length-5} more missed questions</div>` : ''}
+    </div>` : ''}
+    <div class="score-actions">
+      ${retryBtn}
+      ${!isMega ? `<button class="score-action-btn secondary" id="try-flash">Try flashcards</button>` : ''}
+      <button class="score-action-btn secondary" id="go-home-score">All subjects</button>
+    </div>
+  </div>`;
+}
+
+function backBtn() {
+  return `<button class="back-btn" id="go-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back
+  </button>`;
+}
+
+// ============================================================
+// EVENTS & TIMER
+// ============================================================
+function attachEvents() {
+  // HOME — subject card click
+  document.querySelectorAll('.subj-card[data-subj]').forEach(el => {
+    el.addEventListener('click', e => {
+      if (e.target.closest('.subj-action-btn')) return;
+      state.subject = el.dataset.subj;
+      state.screen = 'mode';
+      render();
+    });
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+    });
+  });
+
+  // HOME — action buttons
+  document.querySelectorAll('.subj-action-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      state.subject = btn.dataset.subj;
+      if (btn.dataset.mode === 'quiz') startQuiz();
+      else startFlash();
+    });
+  });
+
+  // BACK
+  ['go-home','go-home-score'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', () => {
+      clearTimer();
+      state.isMega = false;
+      state.screen = 'home';
+      render();
+    });
+  });
+
+  // MEGA QUIZ
+  const mb = document.getElementById('mega-quiz-btn');
+  if (mb) {
+    mb.addEventListener('click', startMegaQuiz);
+    mb.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') { e.preventDefault(); startMegaQuiz(); } });
+  }
+
+  // MODE SELECT
+  const sq = document.getElementById('start-quiz');
+  if (sq) { sq.addEventListener('click', startQuiz); sq.addEventListener('keydown', e => { if(e.key==='Enter') startQuiz(); }); }
+  const sf = document.getElementById('start-flash');
+  if (sf) { sf.addEventListener('click', startFlash); sf.addEventListener('keydown', e => { if(e.key==='Enter') startFlash(); }); }
+
+  // QUIZ options
+  document.querySelectorAll('.opt-btn[data-opt]').forEach(btn => {
+    btn.addEventListener('click', () => selectAnswer(parseInt(btn.dataset.opt)));
+  });
+
+  // QUIZ next
+  const nq = document.getElementById('next-q');
+  if (nq) nq.addEventListener('click', nextQuestion);
+
+  // FLASH
+  const fc = document.getElementById('flip-card');
+  if (fc) {
+    fc.addEventListener('click', () => { state.flashFlipped = !state.flashFlipped; render(); });
+    fc.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); state.flashFlipped = !state.flashFlipped; render(); } });
+  }
+  const pf = document.getElementById('prev-flash');
+  if (pf) pf.addEventListener('click', () => { state.flashIdx--; state.flashFlipped = false; render(); });
+  const nf = document.getElementById('next-flash');
+  if (nf) nf.addEventListener('click', () => { state.flashIdx++; state.flashFlipped = false; render(); });
+  const my = document.getElementById('mark-yes');
+  if (my) my.addEventListener('click', () => { state.flashKnown[state.flashIdx] = true; if (state.flashIdx < FLASH[state.subject].length - 1) { state.flashIdx++; state.flashFlipped = false; } render(); });
+  const mn = document.getElementById('mark-no');
+  if (mn) mn.addEventListener('click', () => { state.flashKnown[state.flashIdx] = false; if (state.flashIdx < FLASH[state.subject].length - 1) { state.flashIdx++; state.flashFlipped = false; } render(); });
+
+  // SCORE actions
+  const rq = document.getElementById('retry-quiz');
+  if (rq) rq.addEventListener('click', () => state.isMega ? startMegaQuiz() : startQuiz());
+  const tf = document.getElementById('try-flash');
+  if (tf) tf.addEventListener('click', startFlash);
+
+  // KEYBOARD shortcuts for quiz
+  if ((state.screen === 'quiz' || state.screen === 'mega') && !state.answered) {
+    document.addEventListener('keydown', handleQuizKey, { once: true });
+  }
+
+  // Score ring animation
+  if (state.screen === 'score') {
+    requestAnimationFrame(() => {
+      const ring = document.getElementById('score-ring');
+      const txt = document.getElementById('score-pct-text');
+      const total = state.qs.length;
+      const pct = Math.round(state.score / total * 100);
+      const circumference = 2 * Math.PI * 65;
+      if (ring) {
+        setTimeout(() => {
+          ring.style.strokeDashoffset = circumference * (1 - pct / 100);
+        }, 100);
+      }
+      if (txt) {
+        let n = 0;
+        const step = Math.max(pct / 40, 1);
+        const anim = setInterval(() => {
+          n = Math.min(n + step, pct);
+          txt.textContent = Math.round(n) + '%';
+          if (n >= pct) clearInterval(anim);
+        }, 30);
+      }
+    });
+  }
+}
+
+function handleQuizKey(e) {
+  if ((state.screen !== 'quiz' && state.screen !== 'mega') || state.answered) return;
+  const keyMap = { 'a': 0, 'b': 1, 'c': 2, 'd': 3, '1': 0, '2': 1, '3': 2, '4': 3 };
+  const k = e.key.toLowerCase();
+  if (k in keyMap) selectAnswer(keyMap[k]);
+  else if (k === ' ' || k === 'enter') {
+    if (state.answered) nextQuestion();
+  }
+}
+
+function selectAnswer(optIdx) {
+  if (state.answered) return;
+  clearTimer();
+  const q = state.qs[state.qIdx];
+  state.selected = q.opts[optIdx];
+  state.answered = true;
+  const correct = state.selected === q.a;
+  if (correct) state.score++;
+  state.results.push(correct);
+  render();
+}
+
+function nextQuestion() {
+  state.qIdx++;
+  if (state.qIdx >= state.qs.length) {
+    const pct = Math.round(state.score / state.qs.length * 100);
+    if (state.isMega) {
+      if (pct > (state.progress.mega || 0)) { state.progress.mega = pct; saveProgress(); }
+    } else {
+      if (pct > (state.progress[state.subject] || 0)) { state.progress[state.subject] = pct; saveProgress(); }
+    }
+    state.screen = 'score';
+    clearTimer();
+    render();
+    if (state.score === state.qs.length) spawnConfetti();
+  } else {
+    state.answered = false;
+    state.selected = null;
+    render();
+    startTimer();
+  }
+}
+
+function startTimer() {
+  clearTimer();
+  state.timerSec = state.timerMax;
+  state.timerInterval = setInterval(() => {
+    state.timerSec--;
+    const bar = document.getElementById('timer-bar');
+    if (bar) {
+      bar.style.width = (state.timerSec / state.timerMax * 100) + '%';
+      if (state.timerSec <= 8) bar.style.background = '#f87171';
+    }
+    if (state.timerSec <= 0) {
+      clearTimer();
+      if (!state.answered) {
+        state.answered = true;
+        state.selected = null;
+        state.results.push(false);
+        render();
+      }
+    }
+  }, 1000);
+}
+
+function clearTimer() {
+  if (state.timerInterval) { clearInterval(state.timerInterval); state.timerInterval = null; }
+}
+
+function startQuiz() {
+  clearTimer();
+  state.screen = 'quiz';
+  state.isMega = false;
+  state.qs = shuffle(QUIZ[state.subject]).slice(0, 15);
+  state.qIdx = 0; state.score = 0;
+  state.answered = false; state.selected = null;
+  state.results = [];
+  render();
+  startTimer();
+}
+
+function startMegaQuiz() {
+  clearTimer();
+  // Pull questions from all subjects, tag each with its subject, shuffle together
+  const all = [];
+  Object.entries(QUIZ).forEach(([subj, qs]) => {
+    qs.forEach(q => all.push({ ...q, subj }));
+  });
+  state.screen = 'mega';
+  state.isMega = true;
+  state.subject = null;
+  state.qs = shuffle(all).slice(0, 20);
+  state.qIdx = 0; state.score = 0;
+  state.answered = false; state.selected = null;
+  state.results = [];
+  render();
+  startTimer();
+}
+
+function startFlash() {
+  clearTimer();
+  state.screen = 'flash';
+  state.flashIdx = 0; state.flashFlipped = false;
+  state.flashKnown = {};
+  render();
+}
+
+// ============================================================
+// CONFETTI
+// ============================================================
+function spawnConfetti() {
+  const colors = ['#c084fc','#fb923c','#34d399','#60a5fa','#f9a8d4','#fcd34d'];
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.top = '-20px';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.width = (Math.random() * 10 + 6) + 'px';
+      c.style.height = (Math.random() * 10 + 6) + 'px';
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      c.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+      c.style.animationDelay = '0s';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
+    }, i * 40);
+  }
+}
+
+// ============================================================
+// GO
+// ============================================================
+render();
+</script>
+</body>
+</html>
